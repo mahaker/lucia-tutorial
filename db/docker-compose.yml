@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  db:
+    build: .
+    ports:
+      - 5430:5432
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: password
