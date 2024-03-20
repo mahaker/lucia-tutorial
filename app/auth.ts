@@ -7,14 +7,13 @@ import { NodePostgresAdapter } from "@lucia-auth/adapter-postgresql";
 import pg from "pg";
 
 const pool = new pg.Pool({
-  connectionString:
-    "postgres://test:password@localhost:5430/lucia_demo_db?currentSchema=lucia_demo",
+  connectionString: "postgres://test:password@localhost:5430/lucia_demo_db",
 });
 
 // DBのテーブル名を指定
 const adapter = new NodePostgresAdapter(pool, {
-  user: "lucia_demo.auth_user",
-  session: "lucia_demo.user_session",
+  user: "auth_user",
+  session: "user_session",
 });
 
 export const lucia = new Lucia(adapter, {

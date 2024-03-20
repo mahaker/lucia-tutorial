@@ -54,8 +54,8 @@ async function signup(formData: FormData): Promise<ActionResult> {
   // TODO: check if username is already used
   console.log(userId, username, hashedPassword);
   await client!.query(
-    "INSERT INTO lucia_demo.auth_user(id, username, hashed_password, address) VALUES ($1, $2, $3, $4);",
-    [userId, username, hashedPassword, "hogehoge"]
+    "INSERT INTO auth_user(id, username, hashed_password, address) VALUES ($1, $2, $3, $4);",
+    [userId, username, hashedPassword, "Your Address"]
   );
 
   const session = await lucia.createSession(userId, {});

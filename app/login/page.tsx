@@ -1,3 +1,4 @@
+import Link from "next/link";
 import client from "../db";
 import { Argon2id } from "oslo/password";
 import { cookies } from "next/headers";
@@ -17,6 +18,9 @@ export default function Page() {
         <br />
         <button>Continue</button>
       </form>
+      <div style={{ marginTop: "10px", color: "#89baff" }}>
+        <Link href="/signup">Sign Up</Link>
+      </div>
     </>
   );
 }
@@ -47,7 +51,7 @@ async function login(formData: FormData): Promise<ActionResult> {
   }
 
   const selectUserRes = await client!.query(
-    "SELECT  * FROM lucia_demo.auth_user WHERE username = $1;",
+    "SELECT  * FROM auth_user WHERE username = $1;",
     [username]
   );
   if (selectUserRes.rowCount === 0) {
