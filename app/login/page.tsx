@@ -57,7 +57,6 @@ async function login(formData: FormData): Promise<ActionResult> {
   }
 
   const user = selectUserRes.rows[0];
-  console.log(user.hashed_password, password);
   const validPassword = await new Argon2id().verify(
     user.hashed_password,
     password

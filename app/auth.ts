@@ -1,6 +1,8 @@
 // https://lucia-auth.com/database/postgresql
 
-import { Lucia } from "lucia";
+import { cookies } from "next/headers";
+import { cache } from "react";
+import { Lucia, type Session, type User } from "lucia";
 import { NodePostgresAdapter } from "@lucia-auth/adapter-postgresql";
 import pg from "pg";
 
@@ -30,6 +32,8 @@ export const lucia = new Lucia(adapter, {
       // TODO fix
       // @ts-ignore
       username: attr.username,
+      // @ts-ignore
+      address: attr.address,
     };
   },
 });
@@ -44,3 +48,40 @@ declare module "lucia" {
 interface DatabaseUserAttributes {
   username: string;
 }
+
+export const validateRequest = cache(
+  async (): Promise<
+    { user: User; session: Session } | { user: null; session: null }
+  > => {
+    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    if (!sessionId) {
+      return {
+        user: null,
+        session: null,
+      };
+    }
+
+    const result = await lucia.validateSession(sessionId);
+    try {
+      if (result.session && result.session.fresh) {
+        const sessionCookie = lucia.createSessionCookie(result.session.id);
+        cookies().set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes
+        );
+      }
+
+      if (!result.session) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+        cookies().set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes
+        );
+      }
+    } catch {}
+
+    return result;
+  }
+);

@@ -11,16 +11,10 @@ export default async function Page() {
       <h1>Create an account</h1>
       <form action={signup}>
         <label htmlFor="username">Username</label>
-        <input name="username" id="username" required defaultValue="mahaker" />
+        <input name="username" id="username" required />
         <br />
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          defaultValue="password001"
-        />
+        <input type="password" name="password" id="password" required />
         <br />
         <button>Continue</button>
       </form>
